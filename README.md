@@ -2,7 +2,7 @@
 
 A real-time parameter control system for Autodesk Fusion 360 with a web-based slider interface.
 
-![F_SLIDERS Interface](https://i.imgur.com/example.png)
+![F_SLIDERS Interface](example.png)
 
 ## Overview
 
