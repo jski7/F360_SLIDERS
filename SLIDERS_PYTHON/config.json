@@ -1,0 +1,20 @@
+[
+  {
+    "name": "taildist",
+    "value": 11.3,
+    "expression": "113 mm",
+    "units": "mm"
+  },
+  {
+    "name": "taildiam",
+    "value": 7.1000000000000005,
+    "expression": "71 mm",
+    "units": "mm"
+  },
+  {
+    "name": "dupasquet",
+    "value": 14.5,
+    "expression": "145 mm",
+    "units": "mm"
+  }
+]

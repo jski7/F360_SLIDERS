@@ -1,0 +1,22 @@
+{
+  "parameters": [
+    {
+      "name": "taildist",
+      "value": 113,
+      "min": 79,
+      "max": 147
+    },
+    {
+      "name": "taildiam",
+      "value": 71,
+      "min": 50,
+      "max": 92
+    },
+    {
+      "name": "dupasquet",
+      "value": 145,
+      "min": 102,
+      "max": 189
+    }
+  ]
+}

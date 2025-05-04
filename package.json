@@ -1,0 +1,13 @@
+{
+  "name": "fusion-360-sliders",
+  "version": "1.0.0",
+  "description": "Slider interface for Fusion 360 parameters",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  }
+} 
