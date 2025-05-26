@@ -1,6 +1,11 @@
 let parameters = [];
 let sliderColors = [];
 
+// Units options
+const lengthUnits = ['mm', 'cm', 'm', 'in', 'ft'];
+const angleUnits = ['deg', 'rad'];
+const allUnits = ['', ...lengthUnits, ...angleUnits]; // Empty string first in the list
+
 function getRandomColor() {
     // Generate a random bright color
     const r = Math.floor(100 + Math.random() * 155);
@@ -29,15 +34,16 @@ function renderParameters() {
 
     const inner = document.createElement('div');
     inner.style.background = '#181818';
-    inner.style.padding = '30px';
+    inner.style.padding = '32px 24px';
     inner.style.borderRadius = '12px';
     inner.style.boxShadow = '0 4px 24px #0008';
     inner.style.width = '100%';
-    inner.style.maxWidth = '500px';
+    inner.style.maxWidth = '800px';
     inner.style.margin = '0 16px';
     inner.style.display = 'flex';
     inner.style.flexDirection = 'column';
     inner.style.alignItems = 'stretch';
+    inner.style.boxSizing = 'border-box';
 
     parameters.forEach((param, idx) => {
         if (!sliderColors[idx]) sliderColors[idx] = getRandomColor();
@@ -46,6 +52,9 @@ function renderParameters() {
         row.style.display = 'flex';
         row.style.alignItems = 'center';
         row.style.marginBottom = '18px';
+        row.style.width = '100%';
+        row.style.boxSizing = 'border-box';
+        row.style.gap = '8px';
 
         // Name input
         const nameInput = document.createElement('input');
@@ -75,6 +84,12 @@ function renderParameters() {
         minInput.style.border = '1px solid #444';
         minInput.style.borderRadius = '4px';
         minInput.style.padding = '4px 8px';
+        
+        // Auto-select entire content when clicked
+        minInput.addEventListener('click', function() {
+            this.select();
+        });
+        
         minInput.addEventListener('change', () => {
             param.min = Number(minInput.value);
             if (param.value < param.min) param.value = param.min;
@@ -89,13 +104,14 @@ function renderParameters() {
         slider.min = param.min;
         slider.max = param.max;
         slider.value = param.value;
+        slider.step = 0.1;
         slider.style.flex = '1';
         slider.style.margin = '0 5px';
         slider.className = 'custom-slider';
         slider.setAttribute('data-idx', idx);
         slider.addEventListener('input', () => {
             param.value = Number(slider.value);
-            valueLabel.innerText = slider.value;
+            valueInput.value = slider.value;
             saveParameters();
         });
         row.appendChild(slider);
@@ -111,6 +127,12 @@ function renderParameters() {
         maxInput.style.border = '1px solid #444';
         maxInput.style.borderRadius = '4px';
         maxInput.style.padding = '4px 8px';
+        
+        // Auto-select entire content when clicked
+        maxInput.addEventListener('click', function() {
+            this.select();
+        });
+        
         maxInput.addEventListener('change', () => {
             param.max = Number(maxInput.value);
             if (param.value > param.max) param.value = param.max;
@@ -119,24 +141,81 @@ function renderParameters() {
         });
         row.appendChild(maxInput);
 
-        // Value label
-        const valueLabel = document.createElement('span');
-        valueLabel.innerText = param.value;
-        valueLabel.style.width = '32px';
-        valueLabel.style.marginLeft = '10px';
-        valueLabel.style.color = '#fff';
-        row.appendChild(valueLabel);
+        // Value input (replacing the label with an editable field)
+        const valueInput = document.createElement('input');
+        valueInput.type = 'number';
+        valueInput.value = param.value;
+        valueInput.step = 0.1;
+        valueInput.style.width = '50px';
+        valueInput.style.marginLeft = '5px';
+        valueInput.style.background = '#222';
+        valueInput.style.color = '#fff';
+        valueInput.style.border = '1px solid #444';
+        valueInput.style.borderRadius = '4px';
+        valueInput.style.padding = '4px 8px';
+        valueInput.style.textAlign = 'right';
+        
+        // Auto-select entire content when clicked
+        valueInput.addEventListener('click', function() {
+            this.select();
+        });
+        
+        valueInput.addEventListener('change', () => {
+            const newVal = Number(valueInput.value);
+            // Enforce min/max constraints
+            if (newVal < param.min) valueInput.value = param.min;
+            if (newVal > param.max) valueInput.value = param.max;
+            
+            param.value = Number(valueInput.value);
+            slider.value = param.value; // Update slider when text field changes
+            saveParameters();
+        });
+        row.appendChild(valueInput);
+
+        // Unit dropdown
+        const unitSelect = document.createElement('select');
+        unitSelect.style.background = '#222';
+        unitSelect.style.color = '#fff';
+        unitSelect.style.border = '1px solid #444';
+        unitSelect.style.borderRadius = '4px';
+        unitSelect.style.padding = '4px';
+        unitSelect.style.marginLeft = '5px';
+        unitSelect.style.width = '65px';
+        unitSelect.style.fontSize = '0.9em';
+        
+        // Add units to dropdown
+        allUnits.forEach(unit => {
+            const option = document.createElement('option');
+            option.value = unit;
+            option.text = unit === '' ? 'no unit' : unit; // Display 'no unit' for empty string
+            unitSelect.appendChild(option);
+        });
+        
+        // Set selected unit or default to mm
+        unitSelect.value = param.unit || '';
+        
+        unitSelect.addEventListener('change', () => {
+            param.unit = unitSelect.value;
+            saveParameters();
+        });
+        
+        row.appendChild(unitSelect);
 
         // Remove button
         const removeBtn = document.createElement('button');
         removeBtn.innerText = '✕';
         removeBtn.title = 'Remove parameter';
-        removeBtn.style.marginLeft = '10px';
+        removeBtn.style.marginLeft = '8px';
+        removeBtn.style.marginRight = '0';
+        removeBtn.style.alignSelf = 'center';
+        removeBtn.style.position = 'relative';
+        removeBtn.style.padding = '2px 6px';
         removeBtn.style.background = '#444';
         removeBtn.style.color = '#fff';
         removeBtn.style.border = 'none';
         removeBtn.style.borderRadius = '4px';
         removeBtn.style.cursor = 'pointer';
+        removeBtn.style.minWidth = '24px';
         removeBtn.addEventListener('click', () => {
             parameters.splice(idx, 1);
             sliderColors.splice(idx, 1);
@@ -166,7 +245,7 @@ function renderParameters() {
     addBtn.style.padding = '8px 16px';
     addBtn.style.cursor = 'pointer';
     addBtn.addEventListener('click', () => {
-        parameters.push({ name: 'NewParam', value: 0, min: 0, max: 100 });
+        parameters.push({ name: '', value: 0, min: 0, max: 100, unit: 'mm' });
         sliderColors.push(getRandomColor());
         saveParameters();
         renderParameters();
@@ -228,7 +307,7 @@ function addCustomSliderStyles() {
 }
 
 function loadParameters() {
-    fetch('http://localhost:3000/parameters')
+    fetch('/parameters')
         .then(response => response.json())
         .then(data => {
             parameters = Array.isArray(data.parameters) ? data.parameters : [];
@@ -239,33 +318,45 @@ function loadParameters() {
 }
 
 function loadParametersFromConfig() {
+    console.log('Loading parameters from config.json...');
     fetch('sliders_python/config.json')
         .then(response => response.json())
         .then(data => {
-            // Convert config.json format to parameters format, scaling values by 10
+            console.log('Received data from config.json:', data);
+            // Convert config.json format to parameters format
             parameters = data.map(param => {
-                let v = typeof param.value === 'number' ? param.value * 10 : 0;
+                const value = typeof param.value === 'number' ? param.value : 0;
+                console.log(`Processing parameter: ${param.name}, Value: ${value}, Unit: ${param.units || ''}`);
+                
                 return {
                     name: param.name,
-                    value: v,
-                    min: typeof v === 'number' ? Math.round(v * 0.7) : 0,
-                    max: typeof v === 'number' ? Math.round(v * 1.3) : 100
+                    value: value,
+                    min: Math.round(value * 0.7),  // Set range relative to the value
+                    max: Math.round(value * 1.3),
+                    unit: param.units || ''  // Use unit from config or default to empty string
                 };
-            });
+            }).filter(param => param.name.trim() !== ''); // Filter out parameters with empty names
+            console.log('Converted parameters:', parameters);
             sliderColors = parameters.map(() => getRandomColor());
             renderParameters();
             saveParameters();
         })
-        .catch(error => console.error('Error loading config.json:', error));
+        .catch(error => {
+            console.error('Error loading config.json:', error);
+            alert('Error loading parameters from Fusion 360. Please make sure the Python script is running.');
+        });
 }
 
 function saveParameters() {
-    fetch('http://localhost:3000/parameters', {
+    // Filter out parameters with empty names before saving
+    const validParameters = parameters.filter(param => param.name.trim() !== '');
+    
+    fetch('/parameters', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ parameters })
+        body: JSON.stringify({ parameters: validParameters })
     })
     .then(response => response.json())
     .then(data => console.log('Parameters updated:', data))

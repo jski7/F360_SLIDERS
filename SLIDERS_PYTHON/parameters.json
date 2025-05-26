@@ -1,22 +1,46 @@
 {
   "parameters": [
     {
-      "name": "taildist",
-      "value": 113,
-      "min": 79,
-      "max": 147
+      "name": "ww",
+      "value": 69.9,
+      "min": 46,
+      "max": 86,
+      "unit": "mm"
     },
     {
-      "name": "taildiam",
-      "value": 71,
-      "min": 50,
-      "max": 92
+      "name": "hh",
+      "value": 80,
+      "min": 62,
+      "max": 116,
+      "unit": "mm"
     },
     {
-      "name": "dupasquet",
-      "value": 145,
-      "min": 102,
-      "max": 189
+      "name": "dd",
+      "value": 30,
+      "min": 21,
+      "max": 39,
+      "unit": "mm"
+    },
+    {
+      "name": "cc",
+      "value": 15,
+      "min": 11,
+      "max": 20,
+      "unit": "mm"
+    },
+    {
+      "name": "angl",
+      "value": 35.7,
+      "min": 21,
+      "max": 39,
+      "unit": "deg"
+    },
+    {
+      "name": "test",
+      "value": 5.6,
+      "min": 4,
+      "max": 7,
+      "unit": ""
     }
   ]
 }

@@ -1,20 +1,38 @@
 [
   {
-    "name": "taildist",
-    "value": 11.3,
-    "expression": "113 mm",
+    "name": "ww",
+    "value": 69.9,
+    "expression": "69.9 mm",
     "units": "mm"
   },
   {
-    "name": "taildiam",
-    "value": 7.1000000000000005,
-    "expression": "71 mm",
+    "name": "hh",
+    "value": 80.0,
+    "expression": "80 mm",
     "units": "mm"
   },
   {
-    "name": "dupasquet",
-    "value": 14.5,
-    "expression": "145 mm",
+    "name": "dd",
+    "value": 30.0,
+    "expression": "30 mm",
     "units": "mm"
+  },
+  {
+    "name": "cc",
+    "value": 15.0,
+    "expression": "15 mm",
+    "units": "mm"
+  },
+  {
+    "name": "angl",
+    "value": 35.70000000000001,
+    "expression": "35.7 deg",
+    "units": "deg"
+  },
+  {
+    "name": "test",
+    "value": 5.6,
+    "expression": "5.6",
+    "units": ""
   }
 ]
